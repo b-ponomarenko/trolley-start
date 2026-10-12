@@ -1,0 +1,130 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+/*
+ * `dark:` applies under an explicit `data-theme="dark"`, and under `data-theme="system"` when the
+ * operating system prefers dark.
+ */
+@custom-variant dark {
+  &:where([data-theme='dark'], [data-theme='dark'] *) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:where([data-theme='system'], [data-theme='system'] *) {
+      @slot;
+    }
+  }
+}
+
+/*
+ * Multiverse census — a "Citadel ID" palette rather than the usual portal-green-on-black: cool
+ * paper and navy ink by day, deep navy by night, Morty's shirt yellow as the only accent in both.
+ *
+ * Every token is a `light-dark()` pair, resolved by `color-scheme`: the theme switch only has to
+ * change `color-scheme`, and `system` is handled by the browser itself.
+ */
+:root {
+  color-scheme: light dark;
+  --radius: 0.75rem;
+
+  --morty: #ffc93c;
+  --alive: light-dark(#23a55a, #3ccf7a);
+  --dead: light-dark(#d64545, #f06a6a);
+  --unknown: light-dark(#8a94a6, #8f9bb3);
+
+  --background: light-dark(#f3f5f7, #0e1525);
+  --foreground: light-dark(#14213d, #e6ebf3);
+  --card: light-dark(#ffffff, #162036);
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: var(--foreground);
+  --primary-foreground: var(--background);
+  --secondary: light-dark(#e4e9ef, #212d47);
+  --secondary-foreground: var(--foreground);
+  --muted: light-dark(#e4e9ef, #1d2840);
+  --muted-foreground: light-dark(#5b6577, #9aa6bb);
+  --accent: var(--morty);
+  --accent-foreground: #14213d;
+  --destructive: var(--dead);
+  --border: light-dark(#d9dfe7, #26324d);
+  --input: var(--border);
+  --ring: var(--morty);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-morty: var(--morty);
+  --color-alive: var(--alive);
+  --color-dead: var(--dead);
+  --color-unknown: var(--unknown);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/60;
+  }
+
+  html {
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground;
+    font-variation-settings: 'wdth' 100;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--morty);
+    outline-offset: 3px;
+  }
+}
+
+@utility font-condensed {
+  font-variation-settings: 'wdth' 75;
+  letter-spacing: -0.01em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
